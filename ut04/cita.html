@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BiciRuta · Reserva de cita en el taller</title>
+    <link rel="stylesheet" href="css/cita.css" />
+    <script src="js/cita.js" defer></script>
+  </head>
+  <body>
+    <header class="cabecera">
+      <div class="contenedor cabecera-contenido">
+        <div class="marca">
+          <img
+            src="img/logo_biciruta.png"
+            alt="Logotipo de BiciRuta"
+            class="logo"
+          />
+          <div>
+            <h1>Taller BiciRuta</h1>
+            <p>Mantenimiento y reparación profesional de bicicletas</p>
+          </div>
+        </div>
+        <form
+          action="receptor.html"
+          method="get"
+          class="form-buscador"
+          role="search"
+        >
+          <label for="buscador-web" class="sr-only">Buscar en la tienda</label>
+          <input
+            type="search"
+            id="buscador-web"
+            name="q"
+            placeholder="Buscar repuestos, accesorios..."
+            required
+            minlength="2"
+          />
+          <button type="submit">Buscar</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="contenedor">
+      <section class="tarjeta-formulario">
+        <h2>Solicitud de cita en el taller</h2>
+        <p class="intro">
+          Rellena los datos de tu bicicleta y elige el servicio que necesitas.
+          Los campos marcados con <span aria-hidden="true">*</span> son
+          obligatorios.
+        </p>
+
+        <form
+          id="form-cita"
+          action="https://httpbin.org/post"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <fieldset>
+            <legend>1. Datos del cliente</legend>
+            <div class="campo">
+              <label for="nombre">Nombre y apellidos *</label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                autocomplete="name"
+                required
+                minlength="3"
+                maxlength="80"
+                aria-describedby="ayuda-nombre"
+              />
+              <small id="ayuda-nombre" class="ayuda"
+                >Introduce tu nombre completo (entre 3 y 80 caracteres).</small
+              >
+            </div>
+            <div class="fila-dos">
+              <div class="campo">
+                <label for="dni">DNI *</label>
+                <input
+                  type="text"
+                  id="dni"
+                  name="dni"
+                  required
+                  pattern="[0-9]{8}[A-Za-z]"
+                  title="8 cifras seguidas de una letra (ejemplo: 12345678Z)"
+                  maxlength="9"
+                  aria-describedby="ayuda-dni"
+                />
+                <small id="ayuda-dni" class="ayuda"
+                  >Formato: 8 cifras y una letra sin guion (ej.
+                  12345678Z).</small
+                >
+              </div>
+              <div class="campo">
+                <label for="telefono">Teléfono móvil *</label>
+                <input
+                  type="tel"
+                  id="telefono"
+                  name="telefono"
+                  autocomplete="tel"
+                  required
+                  pattern="[67][0-9]{8}"
+                  title="9 cifras empezando por 6 o 7 (ejemplo: 612345678)"
+                  maxlength="9"
+                  aria-describedby="ayuda-telefono"
+                />
+                <small id="ayuda-telefono" class="ayuda"
+                  >9 cifras empezando por 6 o 7 (ej. 612345678).</small
+                >
+              </div>
+            </div>
+            <div class="campo">
+              <label for="correo">Correo electrónico *</label>
+              <input
+                type="email"
+                id="correo"
+                name="correo"
+                autocomplete="email"
+                required
+                aria-describedby="ayuda-correo"
+              />
+              <small id="ayuda-correo" class="ayuda"
+                >Te enviaremos el resguardo de la cita a esta dirección.</small
+              >
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>2. Bicicleta y fecha de la cita</legend>
+            <div class="fila-dos">
+              <div class="campo">
+                <label for="fecha">Fecha de la cita *</label>
+                <input
+                  type="date"
+                  id="fecha"
+                  name="fecha"
+                  required
+                  aria-describedby="ayuda-fecha"
+                />
+                <small id="ayuda-fecha" class="ayuda"
+                  >A partir de mañana. El taller cierra los domingos.</small
+                >
+              </div>
+              <div class="campo">
+                <label for="tipo-bici">Tipo de bicicleta *</label>
+                <select id="tipo-bici" name="tipo_bici" required>
+                  <option value="">— Elige una opción —</option>
+                  <option value="urbana">Urbana / Paseo</option>
+                  <option value="carretera">Carretera</option>
+                  <option value="mtb">Montaña (MTB)</option>
+                  <option value="gravel">Gravel</option>
+                  <option value="electrica">Eléctrica (e-Bike)</option>
+                </select>
+              </div>
+            </div>
+            <div class="campo">
+              <label for="km">Km desde la última revisión</label>
+              <input
+                type="number"
+                id="km"
+                name="km"
+                min="0"
+                max="50000"
+                step="100"
+                aria-describedby="ayuda-km"
+              />
+              <small id="ayuda-km" class="ayuda"
+                >Opcional. Valor entre 0 y 50 000 km, en múltiplos de
+                100.</small
+              >
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>3. Servicio solicitado y avería</legend>
+            <div class="campo">
+              <span class="etiqueta-grupo" id="grupo-servicio-label"
+                >Tipo de servicio *</span
+              >
+              <div
+                class="opciones-grupo"
+                role="radiogroup"
+                aria-labelledby="grupo-servicio-label"
+              >
+                <label class="opcion-inline" for="serv-revision">
+                  <input
+                    type="radio"
+                    id="serv-revision"
+                    name="servicio"
+                    value="revision_general"
+                    required
+                  />
+                  Revisión general
+                </label>
+                <label class="opcion-inline" for="serv-reparacion">
+                  <input
+                    type="radio"
+                    id="serv-reparacion"
+                    name="servicio"
+                    value="reparacion_averia"
+                  />
+                  Reparación de avería
+                </label>
+                <label class="opcion-inline" for="serv-puesta-punto">
+                  <input
+                    type="radio"
+                    id="serv-puesta-punto"
+                    name="servicio"
+                    value="puesta_a_punto"
+                  />
+                  Puesta a punto competición
+                </label>
+              </div>
+            </div>
+
+            <div class="campo">
+              <span class="etiqueta-grupo">Servicios extra (opcionales)</span>
+              <div class="opciones-grupo">
+                <label class="opcion-inline" for="extra-lavado">
+                  <input
+                    type="checkbox"
+                    id="extra-lavado"
+                    name="extras"
+                    value="lavado_completo"
+                  />
+                  Lavado y engrase completo
+                </label>
+                <label class="opcion-inline" for="extra-recogida">
+                  <input
+                    type="checkbox"
+                    id="extra-recogida"
+                    name="extras"
+                    value="recogida_domicilio"
+                  />
+                  Recogida y entrega a domicilio
+                </label>
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="averia">Descripción de la avería *</label>
+              <textarea
+                id="averia"
+                name="averia"
+                rows="4"
+                required
+                minlength="20"
+                maxlength="500"
+                aria-describedby="ayuda-averia contador-averia"
+              ></textarea>
+              <div class="pie-textarea">
+                <small id="ayuda-averia" class="ayuda"
+                  >Mínimo 20 caracteres, máximo 500.</small
+                >
+                <small id="contador-averia" class="contador" aria-live="polite"
+                  >0 / 500 caracteres</small
+                >
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="foto">Foto de la avería (opcional)</label>
+              <input
+                type="file"
+                id="foto"
+                name="foto_averia"
+                accept="image/jpeg, image/png, .jpg, .jpeg, .png"
+                aria-describedby="ayuda-foto"
+              />
+              <small id="ayuda-foto" class="ayuda"
+                >Solo se admiten imágenes en formato JPG o PNG.</small
+              >
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>4. Cuenta de cliente (opcional)</legend>
+            <div class="campo">
+              <label class="opcion-inline" for="crear-cuenta">
+                <input
+                  type="checkbox"
+                  id="crear-cuenta"
+                  name="crear_cuenta"
+                  value="si"
+                />
+                Quiero crear una cuenta para consultar el historial de mi
+                bicicleta
+              </label>
+            </div>
+
+            <fieldset id="fieldset-cuenta" class="sub-fieldset" disabled>
+              <legend>Datos de acceso</legend>
+              <div class="fila-dos">
+                <div class="campo">
+                  <label for="clave">Contraseña *</label>
+                  <input
+                    type="password"
+                    id="clave"
+                    name="clave"
+                    autocomplete="new-password"
+                    required
+                    pattern="(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}"
+                    title="Mínimo 8 caracteres, incluyendo al menos una letra y un número"
+                    aria-describedby="ayuda-clave"
+                  />
+                  <small id="ayuda-clave" class="ayuda"
+                    >Mínimo 8 caracteres con al menos una letra y un
+                    número.</small
+                  >
+                </div>
+                <div class="campo">
+                  <label for="clave2">Repite la contraseña *</label>
+                  <input
+                    type="password"
+                    id="clave2"
+                    name="clave2"
+                    autocomplete="new-password"
+                    required
+                    aria-describedby="ayuda-clave2"
+                  />
+                  <small id="ayuda-clave2" class="ayuda"
+                    >Debe coincidir exactamente con la contraseña
+                    anterior.</small
+                  >
+                </div>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <div class="campo-trampa" aria-hidden="true">
+            <label for="sitio-web"
+              >Si eres humano deja este campo en blanco</label
+            >
+            <input
+              type="text"
+              id="sitio-web"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="campo">
+            <label class="opcion-inline" for="privacidad">
+              <input
+                type="checkbox"
+                id="privacidad"
+                name="privacidad"
+                value="aceptada"
+                required
+              />
+              He leído y acepto la política de privacidad y protección de datos
+              *
+            </label>
+          </div>
+
+          <div class="acciones">
+            <button type="submit" class="btn-primario">
+              Confirmar reserva de cita
+            </button>
+            <button type="reset" class="btn-secundario">
+              Limpiar formulario
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="pie">
+      <div class="contenedor">
+        <p>
+          &copy; 2026 BiciRuta Taller · Práctica UT4 Lenguajes de Marcas (CFGS
+          ASIR)
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

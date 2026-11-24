@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alta de Usuario · Red del Centro (ASIR)</title>
+    <style>
+      :root {
+        --primario: #1d4ed8;
+        --fondo: #f8fafc;
+        --borde: #cbd5e1;
+        --valido: #16a34a;
+        --invalido: #dc2626;
+      }
+      * {
+        box-sizing: border-box;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        background: var(--fondo);
+        color: #0f172a;
+        margin: 0;
+        padding: 2rem 1rem;
+      }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      }
+      h1 {
+        color: var(--primario);
+        margin-top: 0;
+      }
+      fieldset {
+        border: 1px solid var(--borde);
+        border-radius: 8px;
+        padding: 1.2rem;
+        margin-bottom: 1.4rem;
+      }
+      legend {
+        font-weight: 700;
+        color: var(--primario);
+        padding: 0 0.4rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .campo {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.9rem;
+      }
+      label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+      }
+      input,
+      select {
+        padding: 0.55rem 0.7rem;
+        border: 1.5px solid var(--borde);
+        border-radius: 6px;
+        font-size: 0.95rem;
+      }
+      input:not([type="radio"]):not([type="checkbox"]):user-valid,
+      select:user-valid {
+        border-color: var(--valido);
+        background: #f0fdf4;
+      }
+      input:not([type="radio"]):not([type="checkbox"]):user-invalid,
+      select:user-invalid {
+        border-color: var(--invalido);
+        background: #fef2f2;
+      }
+      .inline {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 0.25rem;
+      }
+      .inline label {
+        font-weight: 400;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      small {
+        color: #475569;
+        font-size: 0.78rem;
+        margin-top: 0.2rem;
+      }
+      button {
+        background: var(--primario);
+        color: #fff;
+        border: none;
+        padding: 0.75rem 1.4rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      @media (max-width: 600px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        const fechaNac = document.getElementById("fecha-nacimiento");
+        const clave1 = document.getElementById("password");
+        const clave2 = document.getElementById("password2");
+
+        // Validación a medida 1: Edad mínima de 16 años para tener cuenta en la red del centro
+        fechaNac.addEventListener("change", () => {
+          if (!fechaNac.value) {
+            fechaNac.setCustomValidity("");
+            return;
+          }
+          const [a, m, d] = fechaNac.value.split("-").map(Number);
+          const nacimiento = new Date(a, m - 1, d);
+          const hoy = new Date();
+          let edad = hoy.getFullYear() - nacimiento.getFullYear();
+          const mesDiff = hoy.getMonth() - nacimiento.getMonth();
+          if (
+            mesDiff < 0 ||
+            (mesDiff === 0 && hoy.getDate() < nacimiento.getDate())
+          ) {
+            edad--;
+          }
+
+          if (edad < 16) {
+            fechaNac.setCustomValidity(
+              "Debes tener al menos 16 años cumplidos para solicitar alta en la red.",
+            );
+          } else {
+            fechaNac.setCustomValidity("");
+          }
+        });
+
+        // Validación a medida 2: Coincidencia de contraseñas
+        function validarClaves() {
+          if (clave2.value && clave2.value !== clave1.value) {
+            clave2.setCustomValidity(
+              "Las contraseñas introducidas no coinciden.",
+            );
+          } else {
+            clave2.setCustomValidity("");
+          }
+        }
+        clave1.addEventListener("input", validarClaves);
+        clave2.addEventListener("input", validarClaves);
+      });
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1>Alta de usuario en la red del centro</h1>
+      <p>
+        Completa tus datos académicos y credenciales para activar tu cuenta de
+        dominio.
+      </p>
+
+      <!--
+      JUSTIFICACIÓN DEL MÉTODO DE ENVÍO (POST):
+      Se utiliza method="post" porque el formulario transmite datos personales identificativos
+      (NIA, correo institucional, fecha de nacimiento) y credenciales sensibles (contraseña).
+      Con GET estos datos quedarían expuestos en la URL, el historial del navegador y los logs del servidor.
+    -->
+      <form action="https://httpbin.org/post" method="post">
+        <!-- GRUPO 1: IDENTIFICACIÓN DEL ALUMNO -->
+        <fieldset>
+          <legend>1. Datos del alumno/a</legend>
+
+          <div class="grid">
+            <!-- Tipo 1: text + pattern propio 1 (NIA) -->
+            <div class="campo">
+              <label for="nia"
+                >NIA (Número de Identificación del Alumno) *</label
+              >
+              <input
+                type="text"
+                id="nia"
+                name="nia"
+                required
+                pattern="[0-9]{7,8}"
+                title="El NIA debe tener entre 7 y 8 dígitos numéricos"
+                aria-describedby="ayuda-nia"
+              />
+              <small id="ayuda-nia"
+                >Entre 7 y 8 cifras sin letras (ej. 1045892).</small
+              >
+            </div>
+
+            <!-- Tipo 2: date (validado en JS para edad >= 16 años) -->
+            <div class="campo">
+              <label for="fecha-nacimiento">Fecha de nacimiento *</label>
+              <input
+                type="date"
+                id="fecha-nacimiento"
+                name="fecha_nacimiento"
+                required
+              />
+              <small>Edad mínima requerida: 16 años.</small>
+            </div>
+          </div>
+
+          <div class="grid">
+            <!-- Tipo 3: email + pattern propio 2 (dominio educativo) -->
+            <div class="campo">
+              <label for="correo-centro"
+                >Correo electrónico institucional *</label
+              >
+              <input
+                type="email"
+                id="correo-centro"
+                name="correo_centro"
+                required
+                pattern=".+@educa\.madrid\.org$"
+                title="Debe ser una cuenta oficial @educa.madrid.org"
+              />
+              <small>Debe terminar en @educa.madrid.org</small>
+            </div>
+
+            <!-- Tipo 4: number con min y max -->
+            <div class="campo">
+              <label for="equipo">Número de puesto en el aula (1–30) *</label>
+              <input
+                type="number"
+                id="equipo"
+                name="puesto_aula"
+                min="1"
+                max="30"
+                step="1"
+                required
+              />
+              <small
+                >Indica el número del equipo asignado en el laboratorio.</small
+              >
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- GRUPO 2: PERFIL ACADÉMICO -->
+        <fieldset>
+          <legend>2. Perfil académico y servicios</legend>
+
+          <!-- Tipo 5: select -->
+          <div class="campo">
+            <label for="ciclo">Ciclo formativo *</label>
+            <select id="ciclo" name="ciclo" required>
+              <option value="">— Selecciona tu ciclo —</option>
+              <option value="asir1">1.º CFGS ASIR</option>
+              <option value="asir2">2.º CFGS ASIR</option>
+              <option value="dam1">1.º CFGS DAM</option>
+              <option value="daw1">1.º CFGS DAW</option>
+            </select>
+          </div>
+
+          <!-- Tipo 6: radio -->
+          <div class="campo">
+            <label>Turno de asistencia *</label>
+            <div class="inline">
+              <label
+                ><input type="radio" name="turno" value="diurno" required />
+                Diurno (mañana)</label
+              >
+              <label
+                ><input type="radio" name="turno" value="vespertino" />
+                Vespertino (tarde)</label
+              >
+            </div>
+          </div>
+
+          <!-- Tipo 7: checkbox -->
+          <div class="campo">
+            <label>Recursos solicitados</label>
+            <div class="inline">
+              <label
+                ><input type="checkbox" name="recursos" value="vpn" /> Acceso
+                VPN remoto</label
+              >
+              <label
+                ><input type="checkbox" name="recursos" value="nextcloud" />
+                Carpeta en nube Nextcloud</label
+              >
+              <label
+                ><input type="checkbox" name="recursos" value="proxmox" />
+                Laboratorio virtual Proxmox</label
+              >
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- GRUPO 3: CREDENCIALES -->
+        <fieldset>
+          <legend>3. Credenciales de acceso</legend>
+          <div class="grid">
+            <!-- Tipo 8: password -->
+            <div class="campo">
+              <label for="password">Contraseña de red *</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                minlength="8"
+                pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}"
+                title="Mínimo 8 caracteres con mayúscula, minúscula y número"
+              />
+              <small
+                >Mínimo 8 caracteres, 1 mayúscula, 1 minúscula y 1
+                número.</small
+              >
+            </div>
+
+            <div class="campo">
+              <label for="password2">Confirmar contraseña *</label>
+              <input type="password" id="password2" name="password2" required />
+            </div>
+          </div>
+        </fieldset>
+
+        <button type="submit">Solicitar alta en el dominio</button>
+      </form>
+    </main>
+  </body>
+</html>

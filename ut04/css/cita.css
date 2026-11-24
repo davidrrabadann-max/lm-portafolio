@@ -1,0 +1,348 @@
+/* ===== RESET Y VARIABLES ===== */
+:root {
+  --color-primario: #0f766e;
+  --color-primario-oscuro: #115e59;
+  --color-fondo: #f1f5f9;
+  --color-tarjeta: #ffffff;
+  --color-texto: #1e293b;
+  --color-texto-suave: #475569;
+  --color-borde: #cbd5e1;
+  --color-valido: #16a34a;
+  --color-invalido: #dc2626;
+  --radio: 8px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  line-height: 1.5;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ===== CABECERA Y BUSCADOR ===== */
+.cabecera {
+  background-color: var(--color-primario);
+  color: #ffffff;
+  padding: 1rem 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.cabecera-contenido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.marca h1 {
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.marca p {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.form-buscador {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.form-buscador input {
+  padding: 0.45rem 0.75rem;
+  border: none;
+  border-radius: var(--radio);
+  font-size: 0.9rem;
+  min-width: 210px;
+}
+
+.form-buscador button {
+  padding: 0.45rem 0.9rem;
+  background-color: #042f2e;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radio);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-buscador button:hover {
+  background-color: #134e4a;
+}
+
+/* ===== TARJETA PRINCIPAL Y FIELDSETS ===== */
+.tarjeta-formulario {
+  background-color: var(--color-tarjeta);
+  margin: 2rem 0;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+.tarjeta-formulario h2 {
+  color: var(--color-primario);
+  margin-bottom: 0.35rem;
+}
+
+.intro {
+  color: var(--color-texto-suave);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+fieldset {
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+legend {
+  font-weight: 700;
+  color: var(--color-primario);
+  padding: 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.sub-fieldset {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  background-color: #f8fafc;
+  transition: opacity 0.2s ease;
+}
+
+.sub-fieldset:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== CONTROLES DE FORMULARIO ===== */
+.fila-dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.campo:last-child {
+  margin-bottom: 0;
+}
+
+label,
+.etiqueta-grupo {
+  font-weight: 600;
+  font-size: 0.92rem;
+  margin-bottom: 0.3rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+input[type="password"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1.5px solid var(--color-borde);
+  border-radius: var(--radio);
+  font-family: inherit;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+}
+
+/* ===== VALIDACIÓN VISUAL NATIVA (:user-valid / :user-invalid) ===== */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not(
+    [type="search"]
+  ):user-valid,
+select:user-valid,
+textarea:user-valid {
+  border-color: var(--color-valido);
+  background-color: #f0fdf4;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not(
+    [type="search"]
+  ):user-invalid,
+select:user-invalid,
+textarea:user-invalid {
+  border-color: var(--color-invalido);
+  background-color: #fef2f2;
+}
+
+/* ===== RADIOS, CHECKBOXES Y AYUDAS ===== */
+.opciones-grupo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.opcion-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.opcion-inline input[type="radio"],
+.opcion-inline input[type="checkbox"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--color-primario);
+}
+
+.ayuda {
+  color: var(--color-texto-suave);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.pie-textarea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contador {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+}
+
+/* ===== HONEYPOT OCULTO (AMPLIACIÓN) ===== */
+.campo-trampa {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ===== BOTONES Y PIE ===== */
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.btn-primario,
+.btn-secundario {
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--radio);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primario {
+  background-color: var(--color-primario);
+  color: #ffffff;
+}
+
+.btn-primario:hover {
+  background-color: var(--color-primario-oscuro);
+}
+
+.btn-secundario {
+  background-color: #e2e8f0;
+  color: var(--color-texto);
+}
+
+.btn-secundario:hover {
+  background-color: #cbd5e1;
+}
+
+.pie {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: var(--color-texto-suave);
+  font-size: 0.85rem;
+}
+
+/* ===== RESPONSIVE MÓVIL ===== */
+@media (max-width: 640px) {
+  .tarjeta-formulario {
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+
+  .fila-dos {
+    grid-template-columns: 1fr;
+  }
+
+  .form-buscador {
+    width: 100%;
+  }
+
+  .form-buscador input {
+    flex: 1;
+    min-width: 0;
+  }
+}
