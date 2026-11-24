@@ -1,0 +1,62 @@
+{
+  "aula": "Aula ASIR-104",
+  "centro": "thePower FP Madrid",
+  "actualizado": "2026-11-24",
+  "equipos": [
+    {
+      "id": "EQ-01",
+      "tipo": "router",
+      "activo": true,
+      "nombre": "RTR-CORE-A104",
+      "modelo": "Cisco ISR 4331",
+      "ip": "192.168.104.1",
+      "mac": "00:1A:2B:3C:4D:01",
+      "ubicacion": "Rack Principal - U1",
+      "fechaCompra": "2025-09-10"
+    },
+    {
+      "id": "EQ-02",
+      "tipo": "switch",
+      "activo": true,
+      "nombre": "SW-DIST-A104",
+      "modelo": "Cisco Catalyst 2960-X",
+      "ip": "192.168.104.2",
+      "mac": "00:1A:2B:3C:4D:02",
+      "ubicacion": "Rack Principal - U3",
+      "fechaCompra": "2025-09-10"
+    },
+    {
+      "id": "EQ-03",
+      "tipo": "punto_acceso",
+      "activo": true,
+      "nombre": "AP-WIFI-A104",
+      "modelo": "Ubiquiti UniFi U6 Pro",
+      "ip": "192.168.104.10",
+      "mac": "74:AC:B9:12:8F:03",
+      "ubicacion": "Techo zona central",
+      "fechaCompra": "2026-01-15"
+    },
+    {
+      "id": "EQ-04",
+      "tipo": "servidor",
+      "activo": true,
+      "nombre": "SRV-PROXMOX-01",
+      "modelo": "Dell PowerEdge R350",
+      "ip": "192.168.104.50",
+      "mac": "D4:BE:D9:45:7A:04",
+      "ubicacion": "Rack Principal - U10",
+      "fechaCompra": "2026-02-20"
+    },
+    {
+      "id": "EQ-05",
+      "tipo": "servidor",
+      "activo": true,
+      "nombre": "SRV-NAS-BACKUP",
+      "modelo": "Synology RackStation RS822+",
+      "ip": "192.168.104.51",
+      "mac": "90:09:D0:1E:6B:05",
+      "ubicacion": "Rack Principal - U12",
+      "fechaCompra": "2026-03-05"
+    }
+  ]
+}
